@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: ezydoo
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn ezydoo.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ezydoo-database
+          property: connectionString
+
+databases:
+  - name: ezydoo-database
+    databaseName: ezydoo_db
+    user: ezydoo_user
+    plan: free 
